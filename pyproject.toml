@@ -1,0 +1,35 @@
+[project]
+name = "django-hatchway"
+authors = [
+    {name = "Andrew Godwin", email = "andrew@aeracode.org"},
+]
+description = "An unsurprising Django API framework"
+readme = "README.rst"
+requires-python = ">=3.10"
+license = {text = "BSD-3-Clause"}
+classifiers = [
+    "Framework :: Django",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "pydantic~=1.10",
+]
+dynamic = ["version"]
+
+[tool.setuptools.dynamic]
+version = {attr = "hatchway.__version__"}
+
+[project.optional-dependencies]
+dev = [
+    "pytest~=7.2",
+    "pytest-django~=4.5"
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = [
+    "tests",
+]
+
+DJANGO_SETTINGS_MODULE="tests.test_project.settings"
+django_find_project = false

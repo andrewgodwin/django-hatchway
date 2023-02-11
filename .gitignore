@@ -1,0 +1,11 @@
+*.egg
+*.egg-info
+*.pyc
+.DS_Store
+.idea/*
+.venv
+.vscode
+/*.env*
+/build
+/docs/_build
+__pycache__/

@@ -4,6 +4,10 @@ django-hatchway
 Hatchway is an API framework inspired by the likes of FastAPI, but while trying
 to keep API views as much like standard Django views as possible.
 
+It was built for, and extracted from, `Takahē <https://github.com/jointakahe/takahe>`_;
+if you want to see an example of it being used, browse its
+`api app <https://github.com/jointakahe/takahe/tree/main/api>`_.
+
 
 Installation
 ------------
@@ -35,8 +39,9 @@ view, and decorate it with ``@api_view.get``, ``@api_view.post`` or similar::
 
 The types of your function arguments matter; Hatchway will use them to work out
 where to get their values from and how to parse them. All the standard Python
-types are supported, plus Pydantic-style models (which ideally you should
-build based on the ``hatchway.Schema`` base class).
+types are supported, plus `Pydantic-style models <https://docs.pydantic.dev/>`_
+(which ideally you should build based on the ``hatchway.Schema`` base class,
+as it understands how to load things from Django model instances).
 
 Your return type also matters - this is what Hatchway uses to work out how to
 format/validate the return value. You can leave it off, or set it to ``Any``,
@@ -103,7 +108,7 @@ While ``Path``, ``Query``, ``Body`` and ``File`` force the argument to be
 picked from only that source, there are some more complex ones in there:
 
 * ``PathOrQuery`` first tries the Path, then tries the Query (the default for simple types)
-* ``QueryOrBody`` first tries the Query, then tries the body
+* ``QueryOrBody`` first tries the Query, then tries the Body
 * ``BodyDirect`` forces top-level population of a model - see Model Sourcing, below.
 
 Model Sourcing
@@ -154,7 +159,7 @@ objects are supported - returning a model instance, a dict with the model
 instance values, or an instance of the schema are all equivalent.
 
 A typechecker will honour these too, so we generally recommend returning
-instances of your schema so that your entire view benefits from typechecking,
+instances of your Schema so that your entire view benefits from typechecking,
 rather than relying on the coercion. You'll get typechecking in your Schema
 subclass constructors, and then typechecking that you're always returnining
 the right things from the view.

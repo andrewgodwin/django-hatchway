@@ -1,6 +1,6 @@
 import json
 from collections.abc import Callable
-from typing import Any, Optional, get_type_hints, get_origin
+from typing import Any, Optional, get_origin, get_type_hints
 
 from django.core import files
 from django.http import HttpRequest, HttpResponseNotAllowed, QueryDict
@@ -13,15 +13,15 @@ from .types import (
     BodyDirectType,
     BodyType,
     FileType,
+    PathOrQueryType,
     PathType,
     QueryOrBodyType,
     QueryType,
-    PathOrQueryType,
     acceptable_input,
     extract_output_type,
     extract_signifier,
-    is_optional,
     is_model_subclass,
+    is_optional,
 )
 
 

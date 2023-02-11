@@ -4,14 +4,14 @@ from django.core.files import File
 
 from hatchway.http import ApiResponse
 from hatchway.types import (
+    BaseModel,
     Query,
     QueryType,
-    BaseModel,
     acceptable_input,
     extract_output_type,
     extract_signifier,
-    is_optional,
     is_model_subclass,
+    is_optional,
 )
 
 

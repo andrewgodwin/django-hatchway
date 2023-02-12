@@ -22,7 +22,7 @@ jobs:
           cache-dependency-path: pyproject.toml
       - name: Install dependencies
         run: |
-          python -m pip install -e .[dev]
+          python -m pip install -e .[dev] pre-commit
       - name: Run pytest
         run: |
           python -m pytest

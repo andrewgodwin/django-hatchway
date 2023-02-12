@@ -16,9 +16,10 @@ Install Hatchway from PyPI::
 
     pip install django-hatchway
 
-And add it to your ``INSTALLED_APPS``:
+.. highlight:: python
 
-..  code-block:: python
+And add it to your ``INSTALLED_APPS``::
+
     INSTALLED_APPS = [
         ...
         "hatchway",
@@ -29,9 +30,8 @@ Usage
 -----
 
 To make a view an API endpoint, you should write a standard function-based
-view, and decorate it with ``@api_view.get``, ``@api_view.post`` or similar:
+view, and decorate it with ``@api_view.get``, ``@api_view.post`` or similar::
 
-..  code-block:: python
     from hatchway import api_view
 
     @api_view.get
@@ -52,9 +52,8 @@ if you don't want any return validation.
 URL Patterns
 ~~~~~~~~~~~~
 
-You add API views in your ``urls.py`` file like any other view:
+You add API views in your ``urls.py`` file like any other view::
 
-..  code-block:: python
     urlpatterns = [
         ...
         path("api/test/", my_api_endpoint),
@@ -64,9 +63,8 @@ The view will only accept the method it was decorated with (e.g. ``GET`` for
 ``api_view.get``).
 
 If you want to have two or more views on the same URL but responding to
-different methods, use Hatchway's ``methods`` object:
+different methods, use Hatchway's ``methods`` object::
 
-..  code-block:: python
     from hatchway import methods
 
     urlpatterns = [
@@ -100,9 +98,8 @@ By default, Hatchway will pull arguments from these sources:
 
 You can override where Hatchway pulls an argument from by using one of the
 ``Path``, ``Query``, ``Body``, ``File``, ``QueryOrBody``, ``PathOrQuery``,
-or ``BodyDirect`` annotations:
+or ``BodyDirect`` annotations::
 
-..  code-block:: python
     from hatchway import api_view, Path, QueryOrBody
 
     @api_view.post
@@ -131,9 +128,8 @@ How it pulls it depends on how many body-sourced arguments you have:
 * If you have more than one, it will look for its data in a sub-key named the
   same as the argument name.
 
-For example, this function has two body-sourced things (one implicit, one explicit):
+For example, this function has two body-sourced things (one implicit, one explicit)::
 
-..  code-block:: python
     @api_view.post
     def my_api_endpoint(thing: schemas.MyInputSchema, limit: Body[int] = 100):
         ...
@@ -153,9 +149,8 @@ Return Values
 ~~~~~~~~~~~~~
 
 The return value of an API view, if provided, is used to validate and coerce
-the type of the response:
+the type of the response::
 
-..  code-block:: python
     @api_view.delete
     def my_api_endpoint() -> int:
         ...
@@ -179,9 +174,8 @@ Adding Headers/Status Codes to the Response
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you want to do more to your response than just sling some data back at your
-client, you can return an ApiResponse object instead of a plain value:
+client, you can return an ApiResponse object instead of a plain value::
 
-..  code-block:: python
     from hatchway import api_view, ApiResponse
 
     @api_view.delete

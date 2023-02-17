@@ -35,7 +35,7 @@ view, and decorate it with ``@api_view.get``, ``@api_view.post`` or similar::
     from hatchway import api_view
 
     @api_view.get
-    def my_api_endpoint(id: int, limit: int = 100) -> list[str]:
+    def my_api_endpoint(request, id: int, limit: int = 100) -> list[str]:
         ...
 
 
@@ -103,7 +103,7 @@ or ``BodyDirect`` annotations::
     from hatchway import api_view, Path, QueryOrBody
 
     @api_view.post
-    def my_api_endpoint(id: Path[int], limit: QueryOrBody[int] = 100) -> dict:
+    def my_api_endpoint(request, id: Path[int], limit: QueryOrBody[int] = 100) -> dict:
         ...
 
 While ``Path``, ``Query``, ``Body`` and ``File`` force the argument to be
@@ -131,7 +131,7 @@ How it pulls it depends on how many body-sourced arguments you have:
 For example, this function has two body-sourced things (one implicit, one explicit)::
 
     @api_view.post
-    def my_api_endpoint(thing: schemas.MyInputSchema, limit: Body[int] = 100):
+    def my_api_endpoint(request, thing: schemas.MyInputSchema, limit: Body[int] = 100):
         ...
 
 This means Hatchway will feed the ``schemas.MyInputSchema`` model whatever it
@@ -152,7 +152,7 @@ The return value of an API view, if provided, is used to validate and coerce
 the type of the response::
 
     @api_view.delete
-    def my_api_endpoint() -> int:
+    def my_api_endpoint(request) -> int:
         ...
 
 It can be either a normal Python type, or a ``hatchway.Schema`` subclass. If
@@ -179,7 +179,7 @@ client, you can return an ApiResponse object instead of a plain value::
     from hatchway import api_view, ApiResponse
 
     @api_view.delete
-    def my_api_endpoint() -> ApiResponse[int]:
+    def my_api_endpoint(request) -> ApiResponse[int]:
         ...
         return ApiResponse(42, headers={"X-Safe-Delete": "no"})
 

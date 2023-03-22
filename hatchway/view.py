@@ -5,7 +5,7 @@ from typing import Any, Optional, get_origin, get_type_hints
 from django.core import files
 from django.http import HttpRequest, HttpResponseNotAllowed, QueryDict
 from django.http.multipartparser import MultiPartParser
-from pydantic import BaseModel, create_model
+from pydantic import BaseModel, ValidationError, create_model
 
 from .constants import InputSource
 from .http import ApiError, ApiResponse
@@ -280,7 +280,14 @@ class ApiView:
             else:
                 values[name] = None
         # Give that to the Pydantic model to make it handle stuff
-        model_instance = self.input_model(**values)
+        try:
+            model_instance = self.input_model(**values)
+        except ValidationError as error:
+            return ApiResponse(
+                {"error": "invalid_input", "error_details": error.errors()},
+                status=400,
+                finalize=True,
+            )
         kwargs = {
             name: getattr(model_instance, name)
             for name in model_instance.__fields__
@@ -293,6 +300,15 @@ class ApiView:
         # Call the view with those as kwargs
         try:
             response = self.view(request, **kwargs)
+        except TypeError as error:
+            # TODO: Handle this better by inspecting for default values on the view
+            if "required positional argument" in str(error):
+                return ApiResponse(
+                    {"error": "invalid_input"},
+                    status=400,
+                    finalize=True,
+                )
+            raise
         except ApiError as error:
             return ApiResponse(
                 {"error": error.error}, status=error.status, finalize=True

@@ -53,8 +53,8 @@ def test_basic_view():
     assert json.loads(response.content) == "x"
 
     # Implicit Query not pulling from body
-    with pytest.raises(TypeError):
-        test_view(factory.post("/test/", {"a": 4, "b": 3}))
+    response = test_view(factory.post("/test/", {"a": 4, "b": 3}))
+    assert response.status_code == 400
 
 
 def test_body_direct():
@@ -235,6 +235,49 @@ def test_unusable_type():
         @api_view.get
         def test_view(request, a: RequestFactory):
             pass
+
+
+def test_not_provided():
+    """
+    Tests that missing a parameter gives a nice error
+    """
+
+    @api_view.get
+    def test_view(
+        request,
+        id: str,
+    ):
+        return 1
+
+    response = test_view(RequestFactory().get("/test/"))
+    assert json.loads(response.content) == {"error": "invalid_input"}
+    assert response.status_code == 400
+
+
+def test_string_not_list():
+    """
+    Tests that providing a string not a list for a variable is handled well
+    """
+
+    @api_view.get
+    def test_view(
+        request,
+        id: list[str] | None,
+    ):
+        return 1
+
+    response = test_view(RequestFactory().get("/test/?id=notalist"))
+    assert json.loads(response.content) == {
+        "error": "invalid_input",
+        "error_details": [
+            {
+                "loc": ["id"],
+                "msg": "value is not a valid list",
+                "type": "type_error.list",
+            }
+        ],
+    }
+    assert response.status_code == 400
 
 
 def test_get_values():

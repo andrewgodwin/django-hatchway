@@ -4,4 +4,4 @@ from .types import Body, BodyDirect, Path, Query, QueryOrBody  # noqa
 from .urls import methods  # noqa
 from .view import api_view  # noqa
 
-__version__ = "0.5.1"
+__version__ = "0.5.2"

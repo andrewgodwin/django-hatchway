@@ -16,8 +16,6 @@ Install Hatchway from PyPI::
 
     pip install django-hatchway
 
-.. highlight:: python
-
 And add it to your ``INSTALLED_APPS``::
 
     INSTALLED_APPS = [

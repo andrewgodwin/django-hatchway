@@ -137,7 +137,7 @@ def acceptable_input(annotation) -> bool:
     Returns if this annotation is something we think we can accept as input
     """
     _, inner_type = extract_signifier(annotation)
-    if is_model_subclass(annotation):
+    if is_model_subclass(inner_type):
         return True
     if inner_type in [
         str,
